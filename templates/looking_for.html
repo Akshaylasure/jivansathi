@@ -1,0 +1,719 @@
+
+{% extends "navbar_card.html" %} 
+{% load static %}
+
+{% block title %}
+{{ profile.name }}'s Profile
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'profile.css' %}">
+<style>
+    /* Tabs */
+    /* Tabs */
+    .details-container {
+      
+
+      flex: 2; /* Allow card to take double space */
+      overflow-y: scroll;
+      max-height: 600px; /* Adjust height as needed */
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+  }
+    .card-body {
+      padding: 20px;
+      background-color:white;
+  }
+    
+    .container {
+        width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .nav {
+        display: flex; /* Aligns children in a row and helps with spacing */
+        gap: 10px; /* Adjust the space between the items */
+    }
+    
+    .nav h3 {
+        margin: 0;
+        padding: 0; /* Ensure there's no extra padding */
+    }
+    
+    .nav .active {
+        text-decoration: underline;
+        color: black;
+    }
+      
+      .verify-box {
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .verify-box .text {
+        margin: 0;
+      }
+      
+      .verify-box .icon {
+        background-color: #3498DB;
+        color: #fff;
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      
+      .progress-box {
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .progress-box .progress {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: #fff;
+        background-color: #fff;
+        border: 10px solid #FF69B4;
+        position: relative;
+      }
+      
+      .progress-box .progress::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+      
+      .progress-box .progress::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 41%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: red;
+      }
+      
+      .progress-box .text {
+        margin: 0;
+      }
+      
+      .progress-box .button {
+        background-color: red;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      /* General styling for paragraph elements within the profile-info */
+      .card-body.profile-info p {
+          display: flex;
+          align-items: center; /* Aligns items vertically in the center */
+          margin-bottom: 20px; /* Adds space between each detail block */
+      }
+      
+      /* Styling for images within profile-info paragraphs */
+      .card-body.profile-info img {
+          width: 24px; /* Adjust size as needed */
+          height: 24px; /* Adjust size as needed */
+          margin-right: 8px; /* Space between image and text */
+      }
+      
+      /* Styling for images within profile-about paragraphs */
+      .card-body.profile-about img {
+          width: 34px; /* Adjust size as needed */
+          height: 34px; /* Adjust size as needed */
+          margin-right: 8px; /* Space between image and text */
+      }
+      
+      /* Styling for medium elements within profile-info */
+      .card-body.profile-info medium {
+          display: block; /* Ensures the small text appears on its own line */
+          color: #666; /* Lighter color for the description text */
+          margin-top: 10px; /* Adds space between the detail and the description */
+          font-size: 1em; /* Increases the font size to make it more prominent */
+          line-height: 1.4; /* Adjusts line height for better readability */
+      }
+      
+      /* Specific styling for contact-info medium elements */
+      .card-body.profile-info .contact-info medium {
+          font-size: 1.2em; /* Makes the contact info text larger */
+          color: #333; /* Darker color for better visibility */
+          font-weight: bold; /* Makes the text bold for emphasis */
+      }
+      
+      /* Styling for faint-text class */
+      .faint-text {
+        padding-left : 10px;
+          color: #808080; /* Light grey color for a faint effect */
+          font-size: 16px; /* Font size for the faint text */
+          margin-top: 3px; /* Space above the faint text */
+          display: flex; /* Flex container for aligning image and text in one line */
+          align-items: center; /* Aligns items vertically in the center */
+          margin: 0; /* Remove default margin */
+          grid-row: 3;
+      }
+      
+      /* Additional styling for images within faint-text, if needed */
+      .faint-text img {
+          width: 24px; /* Size of the image */
+          height: 24px; /* Size of the image */
+          margin-right: 8px; /* Space between image and text */
+      }
+      
+  
+  .textarea-container {
+    padding-left : 10px;
+      position: relative;
+      margin-top: 10px;
+  }
+  
+  .textarea-container textarea {
+      width: 100%;
+      height: 30px; /* Adjust height as needed */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      font-size: 0.875rem; /* Smaller font size */
+      resize: vertical; /* Allows vertical resizing only */
+      box-sizing: border-box;
+      outline: none; /* Removes default outline on focus */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .textarea-container textarea:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Add Text Styling */
+  .add-text {
+      position: absolute;
+      top: -20px; /* Position the text above the textarea */
+      right: 10px; /* Position the text to the right of the container */
+      color: red; /* Dark red color for text */
+      
+      font-size: 1 rem; /* Smaller font size */
+      cursor: pointer;
+      z-index: 1; /* Ensure text is above the textarea */
+      text-decoration: none; /* Optional: makes it look clickable */
+      background: none; /* Ensures no background color */
+      border: none; /* Ensures no border */
+      padding: 0; /* No padding */
+  }
+  
+  .add-text:hover {
+      color: #f5c6cb; /* Slightly lighter red on hover */
+  }
+  .icon-pencil:hover {
+    color: #0056b3; /* Slightly darker blue on hover */
+}
+.icon-pencil {
+  position: absolute;
+  top: 50%; /* Center the icon vertically relative to the container */
+  right: 10px; /* Position the icon to the right of the container */
+  transform: translateY(-50%); /* Center the icon vertically */
+  color: #007bff; /* Icon color */
+  font-size: 1rem; /* Adjust size as needed */
+  cursor: pointer;
+  z-index: 1; /* Ensure icon is above the textarea */
+  background: none; /* Ensures no background color */
+  border: none; /* Ensures no border */
+  padding: 0; /* No padding */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.icon-pencil:hover {
+  color: #0056b3; /* Slightly darker blue on hover */
+}
+  .light-font {
+    font-weight: lighter;
+}
+
+
+/* Ensure paragraphs with class occupation-info have proper alignment */
+.occupation-info {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    margin-bottom: 20px; /* Optional: Adds space below the paragraph */
+}
+
+/* Styling for images within occupation-info paragraphs */
+.occupation-info img {
+    width: 24px; /* Adjust size as needed */
+    height: 24px; /* Adjust size as needed */
+    margin-right: 8px; /* Space between image and text */
+}
+
+/* Optional: You can add specific styling for the text if needed */
+.occupation-info {
+    font-size: 16px; /* Adjust font size as needed */
+    color: #333; /* Set a default color for the text */
+}
+
+/* Style for the heading */
+h4 {
+    font-size: 18px; /* Adjust the font size as needed */
+    margin-bottom: 20px; /* Adds space below the heading */
+    font-weight: bold; /* Makes the heading text bold */
+    color: #333; /* Darker color for better visibility */
+}
+
+/* Container for the favourite cards */
+.favourite-cards-container {
+    display: flex; /* Aligns cards in a row */
+    gap: 15px; /* Space between cards */
+    flex-wrap: nowrap; /* Prevents wrapping of cards to the next line */
+}
+
+/* Style for each favourite card */
+.favourite-card {
+    background-color: #f0f0f0; /* Light background color for the card */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 15px; /* Padding inside the card */
+    font-size: 14px; /* Font size for the text inside the card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+    text-align: center; /* Center text inside the card */
+}
+.cont_detail {
+  
+  grid-template-columns: 1fr; /* Single column layout */
+  gap: 16px; /* Space between grid items */
+  padding: 16px; /* Padding inside the grid container */
+  border: 1px solid #ddd; /* Optional: Border for visual separation */
+  border-radius: 8px; /* Optional: Rounded corners */
+  background-color: #f9f9f9; /* Optional: Background color */
+}
+
+.cont_detail p {
+  grid-row: 2; /* Place p in the second row, which is at the bottom */
+  margin: 0; /* Remove default margin */
+}
+
+.profile-upload-container {
+  background-image: url('/static/profile.png'); /* Corrected image path */
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background image */
+  padding: 20px; /* Add some padding */
+  height: 350px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+  margin: 20px 0; /* Space between containers */
+  display: flex; /* Align items */
+  flex-direction: column; /* Vertical layout */
+  align-items: center; /* Center items horizontally */
+  position: relative; /* Enable absolute positioning for children */
+}
+
+.profile-upload-container img {
+  position: absolute;
+  right: 50px; /* Distance from the right edge */
+  top: 20px; /* Distance from the top edge */
+  width: 100px; /* Adjust size as needed */
+  height: auto; /* Maintain aspect ratio */
+   /* Optional: makes the image round */
+}
+
+
+
+/* Basic styling for tabs */
+.nav-tabs {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-item {
+    margin-right: 1px;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px 15px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+}
+
+.nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.tab-content {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 0 0 3px 3px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.favourite-cards-container {
+  display: flex;
+  gap: 10px; /* Space between cards */
+  margin-top: 10px; /* Space above the card container */
+}
+
+/* Individual favourite cards */
+.favourite-card {
+  background-color: #ffe5e5; /* Light red background */
+  padding: 10px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+  text-align: center; /* Center text */
+  flex: 1; /* Optional: Make cards flexible */
+}
+
+/* Styling for the text inside cards */
+.favourite-card span {
+  color: #d93d53; /* Darker red text color */
+  font-size: 1rem; /* Adjust font size if needed */
+  font-weight: bold; /* Make text bold */
+}
+
+
+
+/* Wrapper to enable horizontal scrolling without visible scrollbar */
+.action-buttons-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px; /* Space above the button container */
+  background-color: #ffe5e5; /* Light red background */
+  padding-left: 80px; /* Padding left as you specified */
+  border-radius: 15px; /* Rounded corners */
+    overflow-x: scroll; /* Allow horizontal scrolling */
+    -ms-overflow-style: none;  /* Hide scrollbar for Internet Explorer and Edge */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    white-space: nowrap; /* Prevent buttons from wrapping to the next line */
+    padding: 10px; /* Add padding if needed */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.action-buttons-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Container for action buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px; /* Space above the button container */
+    background-color: #ffe5e5; /* Light red background */
+    padding-left: 80px; /* Padding left as you specified */
+    border-radius: 15px; /* Rounded corners */
+}
+
+/* Styles for individual action buttons */
+.action-button {
+    background-color: #f8d7da; /* Faint red color */
+    color: #d93d53; /* Darker red color for text */
+    border: none; /* Remove default border */
+    border: 1px solid #d93d53; /* Border color matching the button text */
+    border-radius: 15px; /* Rounded corners for buttons */
+    padding: 8px 12px;
+    font-size: 0.7rem; /* Adjust font size if needed */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block; /* Ensures buttons are displayed in a row */
+}
+
+/* Optional: Add hover effects for buttons */
+.action-button:hover {
+    background-color: #d93d53; /* Darker red on hover */
+    color: #fff; /* White text color on hover */
+}
+
+
+    
+</style>
+
+    <!-- Scrollable User Details -->
+    <div class="details-container">
+        
+        
+        <!-- Display Profile Photo -->
+        <div class="profile-upload-container">
+          <img src={% static 'gallery.png' %}  alt="Profile Image" class="profile-image">
+        
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            
+                {{ form.as_p }}
+
+                
+            </form>
+        </div>
+        <div>
+          <ul class="nav nav-tabs" id="profileTabs">
+              <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="{% url 'profile' %}">About Me</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="{% url 'looking_for' %}">Looking For</a>
+              </li>
+          </ul>
+      </div>
+      
+
+        <div class="card">
+            
+            
+
+
+
+
+        <!-- Personal Details -->
+        <div class="card">
+          <div class="textarea-container">
+            <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;" >Basic Details</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">A brief outline of the personal information.</p>
+            <div class="card-body profile-info">
+                <p><img src="{% static 'images/hight.png' %}" alt="Height Icon"> {{ profile.height }} m</p>
+                <p><img src="{% static 'images/cast.png' %}" alt="Caste Icon"> {{ profile.caste }}</p>
+                <p><img src="{% static 'images/toung.png' %}" alt="Mother Tongue Icon"> {{ profile.mother_tongue }}</p>
+                <p><img src="{% static 'images/location.png' %}" alt="City Icon"> {{ profile.city }}</p>
+                <p><img src="{% static 'images/income.png' %}" alt="Annual Income Icon"> {{ profile.annual_income }} Lpa</p>
+                
+                <p><img src="{% static 'images/marage .png' %}" alt="Marriage Status Icon"> {{ profile.marriage_status }}</p>
+                
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="card">
+          <div class="textarea-container">
+            <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;">About Me</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">Describe Your self in few words.</p>
+            <div class="card-body profile-about">
+              <div class="profile-content">
+                  <p class="career-about">"{{ profile.career_about }}"</p>
+                  <p class="faint-text">
+                       👤 Profile managed by self.
+                      
+                  </p>
+                  <p class="faint-text">
+                    ♿️ Disability 
+               </p>
+              </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="textarea-container">
+            <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;">Education</h2>
+
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+          <p class="faint-text">Showcase your educational qualification.</p>
+          <div class="card-body profile-about">
+            <p class="occupation-info">
+              <img src="{% static 'images/education.png' %}" alt="Education Icon">
+              {{ profile.occupation }}
+          </p>
+          
+              <br>
+              <div class="textarea-container">
+                <span class="add-text" ><b>Add</b></span>
+                <textarea placeholder="About your education"style="height:40px;" ></textarea>
+            </div>
+          </div>
+      </div>
+
+
+        <!-- Lifestyle and Family -->
+        <div class="card">
+          <div class="textarea-container">
+            <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;">Lifestyle & Family</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">Introduce your family member,values and background.</p>
+            <div class="card-body profile-about">
+                
+                <p class="occupation-info"><img src="{% static 'images/family.png' %}" alt="Caste Icon"> {{ profile.family_type }} Family</p>
+                <p class="occupation-info"><img src="{% static 'images/family1.png' %}" alt="Caste Icon">" Father is {{ profile.father_occupation }},Mother is {{ profile.mother_occupation }}"</p>
+     
+            </div>
+            <div class="textarea-container">
+              <span class="add-text"><b>Add</b></span>
+              <textarea placeholder="about family" class="faint-text" style="height:40px;">{{ profile.about_family }}</textarea>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="textarea-container">
+            <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;">Contact</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">Details that would help profiles get in touch with you. </p>
+            <div class="card-body profile-info">
+                
+                <p class="occupation-info"><img src="{% static 'images/phone.png' %}" alt="Caste Icon"> {{ profile.mobile }}</p>
+                
+            </div>
+            <div class="textarea-container">
+              <span class="add-text"><b>Add</b></span>
+          </div>
+        </div>
+        
+        <!-- My Lifestyle & Interests -->
+        <div class="card">
+          <div class="textarea-container">
+            <div class="textarea-container">
+              <h2 style="font-size: 20px; font-family: 'Lexend', sans-serif;">My Lifestyle & Interests</h2 >
+              <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+            </div>
+            
+            
+            <p class="faint-text">Give other profile glimpse of your favourite active. </p>
+          </div>
+          
+            
+            <div class="card-body">
+              <h4>Habits</h4>
+                <div class="habits-container">
+                  
+                  <div class="cont_detail">
+                    <span class="emoji">🍷</span>
+                    <h3 class="faint-text" style="font-size: 14px;">Add Drinking Habits</h3>
+                    <p>{{ profile.eating_habits }}</p>
+                </div>
+                    <div class="cont_detail">
+                      <span class="emoji">🍴</span>
+                      <h3 class="faint-text" style="font-size: 14px;">Add Diatery Habits</h3>
+                        <p>{{ profile.drinking_habits }}</p>
+                    </div>
+                    <div class="cont_detail">
+                      <span class="emoji"> 🚬</span>
+                      <h3 class="faint-text" style="font-size: 14px;">Add Smoking  Habits</h3>
+                        <p>{{ profile.smoking_habits }}</p>
+                    </div>
+                </div>
+                <h4>Assist</h4>
+                <br>
+                <div class="textarea-container">
+                  <span class="add-text"><b>Add</b></span>
+              </div>
+              <h4>My Favourite</h4>
+
+              
+              
+
+
+
+
+              <h4>Add more interest to attract Profile!</h4>
+              <div class="action-buttons-wrapper">
+                <div class="action-buttons">
+                    <button class="action-button">🧩Hobbies</button>
+                    <button class="action-button">Interest</button>
+                    <button class="action-button">Language</button>
+                    <button class="action-button">Cuisine</button>
+                    <!-- Add more buttons here --><button class="action-button">Music</button>
+                    <button class="action-button">Intrest</button>
+                    <button class="action-button">Sports</button>
+                    <button class="action-button">Read</button>
+                    <button class="action-button">Movies</button>
+                    <button class="action-button">TV Shows</button>
+                    <button class="action-button">Destination</button>
+                    
+                </div>
+            </div>
+            
+
+
+              <div class="favourite-cards-container">
+
+             
+                  
+              </div>
+              <div id="looking-for" class="tab-pane">
+                <form>
+                    <h2>Looking For</h2>
+                    <label for="looking-description">Description:</label>
+                    <textarea id="looking-description" name="looking-description"></textarea>
+                    <!-- Add more fields as needed -->
+                </form>
+            </div>
+              
+            </div>
+        </div>
+    </div>
+
+    
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.nav-link');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Remove 'active' class from all tabs and tab panes
+            tabs.forEach(t => t.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+
+            // Add 'active' class to the clicked tab and corresponding pane
+            this.classList.add('active');
+            const targetPane = document.querySelector(this.getAttribute('href'));
+            targetPane.classList.add('active');
+        });
+    });
+});
+</script>
+  
+
+    
+    
+{% endblock %}
+
+
+
+

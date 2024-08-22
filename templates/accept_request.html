@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.name }}'s Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+
+        
+        /* Custom CSS styles */
+        
+        body {
+            background: #fff;
+            color: #555; /* Adjust text color as needed */
+        }
+    
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #BA68C8;
+        }
+    
+        .profile-button {
+            background: rgb(99, 39, 120);
+            box-shadow: none;
+            border: none;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+    
+        .profile-button:hover, .profile-button:focus, .profile-button:active {
+            background: #682773;
+            box-shadow: none;
+        }
+    
+        .profile-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+    
+        .profile-container:hover {
+            transform: translateY(-5px);
+        }
+    
+        .profile-sidebar {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    
+        .profile-sidebar .nav-link {
+            color: #555;
+        }
+    
+        .profile-sidebar .nav-link.active {
+            background-color: #BA68C8;
+            color: #fff;
+        }
+    
+        .profile-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+    
+        .form-group label {
+            font-weight: bold;
+        }
+    
+        .form-section {
+            margin-bottom: 20px;
+        }
+    
+        .profile-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    
+        .profile-section h4 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    
+        /* Additional styles added */
+        .nav.flex-column {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    
+        .nav.flex-column .nav-link {
+            color: #555;
+            font-weight: bold;
+            padding: 10px 15px;
+        }
+    
+        .nav.flex-column .nav-link:hover {
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+        }
+    
+        .nav.flex-column .nav-link.active {
+            background-color: #BA68C8;
+            color: #fff;
+        }
+    
+        /* Updated styles for the sidebar */
+        .profile-sidebar {
+            padding: 20px;
+        }
+    
+        .profile-sidebar .text-center {
+            margin-bottom: 20px;
+        }
+    
+        .profile-sidebar img {
+            border: 2px solid #fff;
+        }
+    
+        .profile-sidebar h4 {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    
+        .profile-sidebar .nav-link {
+            color: #333;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .profile-sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+    
+</head>
+<body>
+
+<div class="container rounded bg-white mt-5 mb-5 profile-container">
+    <div class="row">
+        <!-- Left Sidebar -->
+        
+
+        
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div>
+                <ul class="nav nav-tabs" id="profileTabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#about-me">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#looking-for">Looking For</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <!-- About Me Section -->
+                
+            <div class="card-body profile-info">
+                <p><img src="{% static 'images/hight.png' %}" alt="Height Icon"> {{ profile.height }} m</p>
+                <p><img src="{% static 'images/cast.png' %}" alt="Caste Icon"> {{ profile.caste }}</p>
+                <p><img src="{% static 'images/toung.png' %}" alt="Mother Tongue Icon"> {{ profile.mother_tongue }}</p>
+                <p><img src="{% static 'images/location.png' %}" alt="City Icon"> {{ profile.city }}</p>
+                <p><img src="{% static 'images/income.png' %}" alt="Annual Income Icon"> {{ profile.annual_income }}</p>
+                
+                <p><img src="{% static 'images/marage .png' %}" alt="Marriage Status Icon"> {{ profile.marriage_status }}</p>
+                
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="card">
+          <div class="textarea-container">
+            <h2>About Me</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">Describe Your self in few words.</p>
+            <div class="card-body profile-about">
+              <div class="profile-content">
+                  <p class="career-about">{{ profile.career_about }}</p>
+                  <p class="faint-text">
+                      <img src="{% static 'images/profile1.png' %}" alt="Education Icon">Profile managed by self.
+                  </p>
+              </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="textarea-container">
+            <h2 >Education</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+          <p class="faint-text">Showcase your educational qualification.</p>
+          <div class="card-body profile-about">
+            <p class="occupation-info">
+              <img src="{% static 'images/education.png' %}" alt="Education Icon">
+              {{ profile.occupation }}
+          </p>
+          
+              <br>
+              <div class="textarea-container">
+                <span class="add-text" ><b>Add</b></span>
+                <textarea placeholder="About your education"></textarea>
+            </div>
+          </div>
+      </div>
+
+
+        <!-- Lifestyle and Family -->
+        <div class="card">
+          <div class="textarea-container">
+            <h2 >Lifestyle & Family</h2>
+            <span class="icon-pencil" title="Edit"><i class="fas fa-pencil-alt"></i></span>
+          </div>
+            <p class="faint-text">Introduce your family member,values and background.</p>
+            <div class="card-body profile-about">
+                
+                <p class="occupation-info"><img src="{% static 'images/family.png' %}" alt="Caste Icon"> {{ profile.family_type }} Family</p>
+                <p class="occupation-info"><img src="{% static 'images/family1.png' %}" alt="Caste Icon">" Father is {{ profile.father_occupation }},Mother is {{ profile.mother_occupation }}"</p>
+     
+            </div>
+            <div class="textarea-container">
+              <span class="add-text"><b>Add</b></span>
+              <textarea placeholder="about family" class="light-font">{{ profile.about_family }}</textarea>
+
+          </div>
+        </div>
+                <!-- Looking For Section -->
+                <div class="tab-pane fade" id="looking-for">
+                    <div class="p-3">
+                        <div class="profile-section">
+                            <h4>Partner Basic Details</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Partner Age:</strong> <input type="text" id="partnerAge" class="form-control" placeholder="Enter age"></p>
+                                    <p><strong>Partner Height:</strong> <input type="text" id="partnerHeight" class="form-control" placeholder="Enter height"></p>
+                                    <p><strong>Partner Country:</strong> <input type="text" id="partnerCountry" class="form-control" placeholder="Enter country"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Partner Marital Status:</strong> <input type="text" id="partnerMaritalStatus" class="form-control" placeholder="Enter marital status"></p>
+                                    <p><strong>Partner Religion:</strong> <input type="text" id="partnerReligion" class="form-control" placeholder="Enter religion"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Partner Education and Occupation</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Partner Education:</strong> <input type="text" id="partnerEducation" class="form-control" placeholder="Enter education"></p>
+                                    <p><strong>Partner Occupation:</strong> <input type="text" id="partnerOccupation" class="form-control" placeholder="Enter occupation"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Annual Income:</strong> <input type="text" id="annualIncome" class="form-control" placeholder="Enter annual income"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-section">
+                            <h4>Partner Preferences</h4>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong>Partner Preferences:</strong></p>
+                                    <textarea id="partnerPreferences" class="form-control" rows="3" placeholder="Enter partner preferences"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Activate Bootstrap tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Activate Bootstrap tabs
+        $('#profileTabs a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+    });
+</script>
+
+</body>
+</html>

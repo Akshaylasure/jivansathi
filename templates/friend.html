@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="title" content="Django chatapp" />
+    <meta name="description" content="Django Chat Connect is a web application powered by Django, using AJAX JavaScript for real-time messaging. It enables user-friendly chat, friend management, and social interaction." />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Django chatapp" />
+    <meta property="og:description" content="Django Chat Connect is a web application powered by Django, using AJAX JavaScript for real-time messaging. It enables user-friendly chat, friend management, and social interaction." />
+    <meta property="og:image" content="https://filesstatic.netlify.app/Chatapp/img/share.jpeg" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Django chatapp" />
+    <meta property="twitter:image" content="https://filesstatic.netlify.app/Chatapp/img/share.jpeg" />
+    <meta property="twitter:description" content="Django Chat Connect is a web application powered by Django, using AJAX JavaScript for real-time messaging. It enables user-friendly chat, friend management, and social interaction." />
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://filesstatic.netlify.app/chatapp/favicon_io/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://filesstatic.netlify.app/chatapp/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://filesstatic.netlify.app/chatapp/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="https://filesstatic.netlify.app/chatapp/favicon_io/manifest.json" />
+
+    <title>{{ profile.name }}'s Profile</title>
+    <style>
+        
+        
+        .container {
+
+            max-width: 400px;
+            margin-top:16%;
+            margin-left: 35%;
+            height:200px;
+            background-color: #ffffff;
+            border: 2px solid #f78c40;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @media (max-width: 550px) {
+            .container {
+                max-width: 90%;
+                height: auto;
+            }
+        }
+        
+        a {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            border: 2px solid #333;
+            text-decoration: none;
+            color: #ffffff;
+            cursor: pointer;
+            background-color: #007bff;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        .sbtn {
+            padding: 0.8rem 1.5rem;
+            color: #ffffff;
+            background: #6c5ce7;
+            border: none;
+            margin-left:25%;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .sbtn:hover {
+            background: #5a4b9d;
+            transform: scale(1.05);
+        }
+        
+        .cbtn {
+            padding: 0;
+        }
+        
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .is_friend .dbtn {
+            margin-right: 1em;
+        }
+        
+        .is_friend .cbtn {
+            margin-left: 1em;
+        }
+        
+        .message {
+            color: #d9534f;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .message:hover {
+            color: #c9302c;
+        }
+        
+        .info {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .info p {
+            margin: 10px 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .modal-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #ffffff;
+            background: #28a745;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-content button:hover {
+            background: #218838;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #aaa;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+            <div class="message">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="info">
+                <p class="username">Username: {{ user_details.username }}</p>
+                <p class="email">Email: {{ user_details.email }}</p>
+            </div>
+        {% endif %}
+        {% if user_details.send_request %}
+            <div class="send_request">
+                <form method="post" action="{% url 'add_friend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{ user_details.username }}" />
+                    <button class="sbtn" type="submit">Send Request</button>
+                </form>
+            </div>
+        {% elif user_details.not_accepted %}
+            <div class="delete_request">
+                <form method="post" action="{% url 'delete_friend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{ user_details.username }}" />
+                    <button class="sbtn" type="submit">Delete Your Request</button>
+                </form>
+            </div>
+        {% elif user_details.me_not_accepted %}
+            <div class="accept_request">
+                <!-- Modal Trigger Button -->
+                <button class="sbtn" id="openModal">Accept Request</button>
+
+                <!-- Modal -->
+                <div class="modal" id="acceptModal">
+                    <div class="modal-content">
+                        <span class="modal-close" id="closeModal">&times;</span>
+                        <h2>Accept Friend Request</h2>
+                        <p>Are you sure you want to accept the friend request from {{ user_details.username }}?</p>
+                        <form method="post" action="{% url 'accept_request' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" value="{{ user_details.username }}" />
+                            <button type="submit">Yes, Accept</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% if user_details.is_friend %}
+                <div class="row is_friend">
+                    <form method="post" action="{% url 'delete_friend' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{ user_details.username }}" />
+                        <button class="sbtn dbtn" type="submit">Remove Friend</button>
+                    </form>
+                    <button class="sbtn cbtn">
+                        <a href="../../chat/{{ user_details.username }}" style="color: white; text-decoration: none;">Chat</a>
+                    </button>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <script>
+        // Modal Functionality
+        const modal = document.getElementById('acceptModal');
+        const openModal = document.getElementById('openModal');
+        const closeModal = document.getElementById('closeModal');
+
+        openModal.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+</body>
+</html>

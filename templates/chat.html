@@ -1,0 +1,271 @@
+{% extends "navbar_card.html" %}
+{% load static %}
+
+{% block title %}
+{{ profile.name }}'s Profile
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="title" content="Django chatapp" />
+    <meta name="description" content="Django Chat Connect is a web application powered by Django, using AJAX JavaScript for real-time messaging. It enables user-friendly chat, friend management, and social interaction." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Django chatapp" />
+    <meta property="og:image" content="https://filesstatic.netlify.app/Chatapp/img/share.jpeg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Django chatapp" />
+    <meta property="twitter:image" content="https://filesstatic.netlify.app/Chatapp/img/share.jpeg" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://filesstatic.netlify.app/chatapp/favicon_io/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://filesstatic.netlify.app/chatapp/favicon_io/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://filesstatic.netlify.app/chatapp/favicon_io/favicon-16x16.png" />
+    <link rel="manifest" href="https://filesstatic.netlify.app/chatapp/favicon_io/manifest.json" />
+
+    <title>Chat</title>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+    
+
+      /* Container for the chat */
+      .outer {
+        
+            top: 80px;
+            right: 300px;
+            width: 50%;
+            max-width: 600px;
+            height: 530px; /* New smaller height */
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+      }
+
+      /* Top bar with navigation */
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: white;
+        color: #000;
+        border-bottom: 1px solid #0056b3;
+      }
+
+      .top a {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .top a:hover {
+        text-decoration: underline;
+      }
+
+      /* Message container */
+      .messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        border-bottom: 1px solid #ddd;
+        background-color: #e9ecef;
+      }
+
+      /* Message bubbles */
+      .container {
+        hight:30px;
+        max-width: 75%;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 50px;
+        position: relative;
+      }
+
+      .left_mess {
+        background-color: #f8d7da;
+        margin-left: 10px;
+        text-align: left;
+        color: #000;
+      }
+
+      .right_mess {
+        background-color: #d0f0c0;
+        
+        
+
+        color: #000;
+        margin-left: auto;
+        text-align: right;
+      }
+
+      .time-left, .time-right {
+        font-size: 0.75em;
+        color: #666;
+        position: absolute;
+        bottom: 5px;
+      }
+
+      .time-left {
+        left: 10px;
+      }
+
+      .time-right {
+        right: 10px;
+      }
+
+      /* Bottom bar with input */
+      .bottom {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-left:75%;
+      }
+
+      #msg_field {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 1em;
+      }
+
+      #send_btn {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s;
+      }
+
+      #send_btn:hover {
+        background-color: #0056b3;
+      }
+
+      #send_btn i {
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="top">
+        <a class="back" href="../user/">Back</a>
+        <a class="username" href="../user/{{ friend.username }}">{{ friend.username }}</a>
+      </div>
+      <div class="messages" id="board">
+        {% for message in messages %}
+          {% if curr_user == message.sender_name %}
+            <div class="container right_mess">
+              <p>{{ message.description }}</p>
+              <span class="time-right">{{ message.time }}</span>
+            </div>
+          {% else %}
+            <div class="container left_mess">
+              <p>{{ message.description }}</p>
+              <span class="time-left">{{ message.time }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="bottom">
+        <form method="post" class="form-group" id="chat-box">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" placeholder="Send a message..." name="message" id="msg_field" />
+            <button type="submit" name="send" class="btn btn-success" id="send_btn">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      sender_id = '{{ friend.id }}'
+      receiver_id = '{{ curr_user.id }}'
+      var messageBody = document.querySelector('.messages')
+      messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight
+      
+      const text = '<div class="container left_mess">' + '<p>{description}</p>' + '<span class="time-left">{time}</span>' + '</div>'
+      const text_box = '<div class="container right_mess">' + '<p>{description}</p>' + '<span class="time-right">{time}</span>' + '</div>'
+      
+      function scrolltoend() {
+        $('#board')
+          .stop()
+          .animate(
+            {
+              scrollTop: $('#board')[0].scrollHeight
+            },
+            800
+          )
+      }
+      
+      $(function () {
+        setInterval(receive, 1000)
+      })
+      
+      function receive() {
+        $.get('/api/messages/' + sender_id + '/' + receiver_id, function (data) {
+          if (data.length !== 0) {
+            for (var i = 0; i < data.length; i++) {
+              var field = text.replace('{description}', data[i].description)
+              var time = data[i].time.slice(0, 5)
+              field = field.replace('{time}', time)
+              $('#board').append(field)
+              scrolltoend()
+            }
+          }
+        })
+      }
+      // For sending
+      $(function () {
+        $('#chat-box').on('submit', function (event) {
+          event.preventDefault()
+          var message = $('#msg_field')
+          send('{{ curr_user.username }}', '{{ friend.username }}', message.val())
+          message.val('')
+        })
+      })
+      
+      function send(sender, receiver, message) {
+        $.post('/api/messages', '{"sender_name": "' + sender + '", "receiver_name": "' + receiver + '","description": "' + message + '" }', function (data) {
+          var field = text_box.replace('{description}', message)
+          var today = new Date()
+          var time = today.getHours() + ':' + today.getMinutes()
+          field = field.replace('{time}', time)
+          $('#board').append(field)
+          scrolltoend()
+        })
+      }
+    </script>
+  </body>
+</html>
+
+{% endblock %}
